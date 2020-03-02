@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, createRef, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { Input, List } from 'antd';
 import uuid from 'lodash-uuid';
 
