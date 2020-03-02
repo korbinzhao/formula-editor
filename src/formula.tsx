@@ -112,7 +112,6 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
     let addExpressionText = "";
     let cursorMove = false;
-    // const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
 
     switch (item.type) {
       case 'function':
@@ -124,9 +123,7 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
         break;
       default:
         break;
-
     }
-
 
     const preExpressionCursorPosition = textareaDom.selectionStart;
 
@@ -150,7 +147,6 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   // 字段列表点击
   const onFieldItemClick = (item) => {
-    // const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
 
     const preExpressionCursorPosition = textareaDom.selectionStart;
 
@@ -166,9 +162,6 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
   useEffect(() => {
     textareaDom = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
     textareaDom.setSelectionRange(expression.length, expression.length);
-
-    console.log('--- useEffect ---', expression)
-
   }, [props.expression]);
 
   return (
