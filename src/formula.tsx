@@ -57,16 +57,46 @@ const fields = [{
 
 const uniqueContainerClassName = `formula-${uuid()}`;
 
-function insertStr(soure, start, newStr) {
-
+function insertStr(soure, start, newStr): string {
   return soure.slice(0, start) + newStr + soure.slice(start);
 }
 
-const Formula: FunctionComponent = (): JSX.Element => {
+function expression2formula(expression) {
 
-  const [expression, setExpression] = useState<string>("");
-  const [formula, setFormula] = useState<string>("");
-  const [formulaConfig, setFormulaConfig] = useState<object[]>([]);
+  let formula = expression;
+
+  functions.forEach(item => {
+    formula = formula.replace(new RegExp(item.name, 'g'), item.value);
+  });
+
+  fields.forEach(item => {
+    formula = formula.replace(new RegExp(`\\[${item.name}\\]`, 'g'), `[${item.key}]`);
+  })
+
+  return formula;
+}
+
+interface Props{
+  formula?: string;
+  expression?: string;
+  callback?: (expression, formula) => void;
+}
+
+const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
+
+  const [expression, setExpression] = useState<string>(props.expression || '');
+  const [formula, setFormula] = useState<string>(props.formula || '');
+
+  const onChange = (expression) => {
+
+    const formula = expression2formula(expression);
+
+    props.callback?.(expression, formula);
+
+    setFormula(formula);
+
+    console.log('--- onChange ---', expression, formula)
+  }
 
   const onFunctionItemClick = (item) => {
 
@@ -104,6 +134,8 @@ const Formula: FunctionComponent = (): JSX.Element => {
       }, 10)
     }
 
+    onChange(newExpression);
+
   }
 
   const onFieldItemClick = (item) => {
@@ -116,6 +148,8 @@ const Formula: FunctionComponent = (): JSX.Element => {
     setExpression(newExpression);
 
     textareaDom.focus();
+
+    onChange(newExpression);
   }
 
 
