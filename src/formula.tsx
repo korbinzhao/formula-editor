@@ -1,5 +1,5 @@
-import React, { Component, FunctionComponent, useState, createRef } from 'react';
-import { Input, List, Typography } from 'antd';
+import React, { FunctionComponent, useState, createRef } from 'react';
+import { Input, List } from 'antd';
 import uuid from 'lodash-uuid';
 
 import './formula.less';
@@ -57,10 +57,20 @@ const fields = [{
 
 const uniqueContainerClassName = `formula-${uuid()}`;
 
+/**
+ * 将字符串传入另一个字符串固定位置
+ * @param soure 被操作字符串
+ * @param start 插入位置
+ * @param newStr 被插入字符串片段
+ */
 function insertStr(soure, start, newStr): string {
   return soure.slice(0, start) + newStr + soure.slice(start);
 }
 
+/**
+ * 将中文表达式转换为数学公式
+ * @param expression 中文表达式
+ */
 function expression2formula(expression) {
 
   let formula = expression;
@@ -77,15 +87,16 @@ function expression2formula(expression) {
 }
 
 interface Props{
-  formula?: string;
-  expression?: string;
-  onChange?: (expression, formula) => void;
+  formula?: string; // 数学公式
+  expression?: string; // 中文表达式
+  onChange?: (expression, formula) => void; // 回调函数
 }
 
 const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   const [expression, setExpression] = useState<string>(props.expression || '');
 
+  // 当中文表达式发生变化
   const onExpressionChange = (expression) => {
 
     const formula = expression2formula(expression);
@@ -94,6 +105,7 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   }
 
+  // 函数列表点击
   const onFunctionItemClick = (item) => {
 
     let addExpressionText = "";
@@ -134,6 +146,7 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   }
 
+  // 字段列表点击
   const onFieldItemClick = (item) => {
     const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
 
