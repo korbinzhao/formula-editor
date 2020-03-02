@@ -79,23 +79,19 @@ function expression2formula(expression) {
 interface Props{
   formula?: string;
   expression?: string;
-  callback?: (expression, formula) => void;
+  onChange?: (expression, formula) => void;
 }
 
 const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   const [expression, setExpression] = useState<string>(props.expression || '');
-  const [formula, setFormula] = useState<string>(props.formula || '');
 
-  const onChange = (expression) => {
+  const onExpressionChange = (expression) => {
 
     const formula = expression2formula(expression);
 
-    props.callback?.(expression, formula);
+    props.onChange?.(expression, formula);
 
-    setFormula(formula);
-
-    console.log('--- onChange ---', expression, formula)
   }
 
   const onFunctionItemClick = (item) => {
@@ -134,7 +130,7 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
       }, 10)
     }
 
-    onChange(newExpression);
+    onExpressionChange(newExpression);
 
   }
 
@@ -149,7 +145,7 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
     textareaDom.focus();
 
-    onChange(newExpression);
+    onExpressionChange(newExpression);
   }
 
 
@@ -158,8 +154,10 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
     <div className={`formula-editor-container ${uniqueContainerClassName}`}>
 
       <TextArea className="expression-textarea"
-        value={expression} placeholder="请输入公式" onChange={(e) => {
+        value={expression} placeholder="请输入公式" 
+        onChange={(e) => {
           setExpression(e.target.value)
+          onExpressionChange(e.target.value);
         }} />
 
       <div className="choice-container ">
