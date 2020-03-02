@@ -4,7 +4,7 @@
   "description": "a generator for component based on react & typescript & webpack4",
   "main": "lib/index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --open",
+    "start": "webpack-dev-server --mode development --open --port 3333",
     "build": "webpack --mode production",
     "lib": "babel src --extensions '.ts,.tsx' --out-dir lib && gulp",
     "prepublish": "npm run lib"

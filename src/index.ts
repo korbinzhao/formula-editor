@@ -1,3 +1,3 @@
-import App from "./my-component";
+import App from "./formula";
 
 export default App;
