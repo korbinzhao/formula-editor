@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, createRef } from 'react';
+import React, { FunctionComponent, useState, createRef, useEffect } from 'react';
 import { Input, List } from 'antd';
 import uuid from 'lodash-uuid';
 
@@ -94,6 +94,8 @@ interface Props{
 
 const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
+  let textareaDom: HTMLInputElement;
+
   const [expression, setExpression] = useState<string>(props.expression || '');
 
   // 当中文表达式发生变化
@@ -110,7 +112,7 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
     let addExpressionText = "";
     let cursorMove = false;
-    const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
+    // const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
 
     switch (item.type) {
       case 'function':
@@ -148,7 +150,7 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   // 字段列表点击
   const onFieldItemClick = (item) => {
-    const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
+    // const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
 
     const preExpressionCursorPosition = textareaDom.selectionStart;
 
@@ -161,6 +163,10 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
     onExpressionChange(newExpression);
   }
 
+  useEffect(() => {
+    textareaDom = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
+    textareaDom.setSelectionRange(expression.length, expression.length);
+  });
 
   return (
 
