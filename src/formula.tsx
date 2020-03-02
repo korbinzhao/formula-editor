@@ -1,7 +1,7 @@
 import React, { Component, FunctionComponent, useState } from 'react';
 import { Input } from 'antd';
 
-import './my-component.less';
+import './formula.less';
 
 const { TextArea } = Input;
 
