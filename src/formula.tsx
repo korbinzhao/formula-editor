@@ -1,5 +1,6 @@
 import React, { Component, FunctionComponent, useState, createRef } from 'react';
 import { Input, List, Typography } from 'antd';
+import uuid from 'lodash-uuid';
 
 import './formula.less';
 
@@ -54,48 +55,77 @@ const fields = [{
   dataRole: 'MEASURE'
 }];
 
+const uniqueContainerClassName = `formula-${uuid()}`;
 
+function insertStr(soure, start, newStr) {
 
-const MyComponent: FunctionComponent = (): JSX.Element => {
+  return soure.slice(0, start) + newStr + soure.slice(start);
+}
 
-  const formulaTextareaRef: React.LegacyRef<any> = createRef();
+const Formula: FunctionComponent = (): JSX.Element => {
 
+  const [expression, setExpression] = useState<string>("");
   const [formula, setFormula] = useState<string>("");
+  const [formulaConfig, setFormulaConfig] = useState<object[]>([]);
 
   const onFunctionItemClick = (item) => {
 
-    let addText = "";
+    let addExpressionText = "";
+    let cursorMove = false;
+    const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
 
     switch (item.type) {
       case 'function':
-        addText = item.value + "()"
+        addExpressionText = item.name + "()";
+        cursorMove = true;
         break;
       case 'operator':
-        addText = item.value;
+        addExpressionText = item.value;
         break;
       default:
         break;
 
     }
 
-    setFormula(formula + addText)
 
-    formulaTextareaRef.current.focus();
-    formulaTextareaRef.current.selectionStart = formula.length - 1;
+    const preExpressionCursorPosition = textareaDom.selectionStart;
+
+    const newExpression = insertStr(expression, preExpressionCursorPosition, addExpressionText);
+
+    setExpression(newExpression);
+
+    const expressionCursorPosition = preExpressionCursorPosition + addExpressionText.length - 1;
+
+    textareaDom.focus();
+
+    if (cursorMove) {
+      setTimeout(() => {
+        textareaDom.setSelectionRange(expressionCursorPosition, expressionCursorPosition);
+      }, 10)
+    }
+
   }
 
   const onFieldItemClick = (item) => {
-    setFormula(formula + item.key)
+    const textareaDom: HTMLInputElement = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
+
+    const preExpressionCursorPosition = textareaDom.selectionStart;
+
+    const newExpression = insertStr(expression, preExpressionCursorPosition, `[${item.name}]`);
+
+    setExpression(newExpression);
+
+    textareaDom.focus();
   }
+
 
   return (
 
-    <div className="formula-editor-container">
+    <div className={`formula-editor-container ${uniqueContainerClassName}`}>
 
-      <TextArea className="formula-textarea"
-        ref={formulaTextareaRef}
-        value={formula} placeholder="请输入公式" onChange={(e) => {
-          setFormula(e.target.value)
+      <TextArea className="expression-textarea"
+        value={expression} placeholder="请输入公式" onChange={(e) => {
+          setExpression(e.target.value)
         }} />
 
       <div className="choice-container ">
@@ -130,4 +160,4 @@ const MyComponent: FunctionComponent = (): JSX.Element => {
   );
 };
 
-export default MyComponent;
+export default Formula;
