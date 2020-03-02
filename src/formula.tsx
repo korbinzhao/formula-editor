@@ -92,9 +92,9 @@ interface Props{
   onChange?: (expression, formula) => void; // 回调函数
 }
 
-const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
+let textareaDom: HTMLInputElement;
 
-  let textareaDom: HTMLInputElement;
+const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   const [expression, setExpression] = useState<string>(props.expression || '');
 
@@ -166,7 +166,10 @@ const Formula: FunctionComponent<Props> = (props: Props): JSX.Element => {
   useEffect(() => {
     textareaDom = document.querySelector(`.${uniqueContainerClassName}`).querySelector('.expression-textarea');
     textareaDom.setSelectionRange(expression.length, expression.length);
-  });
+
+    console.log('--- useEffect ---', expression)
+
+  }, [props.expression]);
 
   return (
 
